@@ -2,6 +2,14 @@
 app/server.py - FastAPI Application Factory and Server Entry Point.
 """
 
+import sys
+from pathlib import Path
+
+# Ensure root directory is in sys.path for direct execution (e.g., py app/server.py)
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
