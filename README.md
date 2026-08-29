@@ -7,9 +7,11 @@ A modular, type-safe Python CLI tool designed to ingest, validate, and analyze G
 ## Features
 
 - **Pydantic v2 Models**: Strict validation with custom field validators for GitHub API responses (`UserProfile` & `Repository`).
+- **Layered Architecture**: Organized into distinct layers (`core`, `models`, `services`, `utils`).
 - **Resilient HTTP Client**: Built with `httpx` featuring timeouts, redirection handling, and standard GitHub API headers.
 - **Data Filtering & Ranking**: Automatically filters out forks and ranks source repositories by star count descending.
 - **Robust Error Handling**: Graceful error handling for HTTP 404 (user not found), HTTP 403 (rate limiting), network timeouts, and JSON validation issues.
+- **Automated Unit Tests**: Built-in test suite verifying data models, edge cases, and ranking logic.
 - **Clean Terminal UI**: Structured metrics overview and top-repository breakdown.
 
 ---
@@ -18,11 +20,28 @@ A modular, type-safe Python CLI tool designed to ingest, validate, and analyze G
 
 ```text
 github_data_ingestor/
-├── schemas.py          # Pydantic v2 data models & field validators
-├── main.py             # Ingestion pipeline, HTTP client & CLI presentation
-├── requirements.txt    # Project dependencies
-├── .gitignore          # Git exclusion rules
-└── README.md           # Project documentation
+├── app/
+│   ├── __init__.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   └── config.py          # API URLs, headers, default settings
+│   ├── models/
+│   │   ├── __init__.py
+│   │   └── schemas.py         # Pydantic v2 validation models
+│   ├── services/
+│   │   ├── __init__.py
+│   │   └── github_service.py  # HTTP client & GitHub REST API service
+│   └── utils/
+│       ├── __init__.py
+│       └── presenter.py       # Terminal UI formatting & output
+├── tests/
+│   ├── __init__.py
+│   └── test_models.py         # Unit tests for schemas & business logic
+├── main.py                    # Application CLI entry point
+├── schemas.py                 # Re-export alias for models
+├── requirements.txt           # Project dependencies
+├── .gitignore                 # Git ignore rules
+└── README.md                  # Project documentation
 ```
 
 ---
@@ -53,15 +72,27 @@ github_data_ingestor/
 
 ---
 
-## Usage
+## Running the Application
 
-Run the tool using Python:
+Execute `main.py` using Python:
 
 ```bash
 py main.py
 ```
 
-You will be prompted for a GitHub username (defaults to `octocat` if left blank):
+---
+
+## Running Unit Tests
+
+Run the built-in test suite:
+
+```bash
+py -m unittest discover tests
+```
+
+---
+
+## Sample Terminal Output
 
 ```text
 Enter GitHub username (default: 'octocat'): octocat

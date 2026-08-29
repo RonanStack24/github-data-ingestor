@@ -1,5 +1,5 @@
 """
-schemas.py - Backwards compatibility alias for app.models.schemas.
+Data models and schemas package.
 """
 from app.models.schemas import Repository, UserProfile
 

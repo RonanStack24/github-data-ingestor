@@ -1,0 +1,3 @@
+"""
+GitHub Data Ingestor Package.
+"""
