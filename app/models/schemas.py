@@ -1,11 +1,11 @@
 """
-app/models/schemas.py - Pydantic Data Models for GitHub API Entities.
+app/models/schemas.py - Pydantic Data Models for GitHub API Entities and API Responses.
 
-Defines validation schemas for GitHub user profiles and repositories
-using Pydantic v2.
+Defines validation schemas for GitHub user profiles, repositories, and
+FastAPI response models using Pydantic v2.
 """
 
-from typing import Optional
+from typing import List, Optional
 from pydantic import BaseModel, Field, HttpUrl, field_validator
 
 
@@ -97,3 +97,26 @@ class Repository(BaseModel):
         if v is None or not str(v).strip():
             return "Unknown"
         return str(v).strip()
+
+
+class DeveloperInsightsResponse(BaseModel):
+    """
+    Schema representing the aggregated API response for a GitHub developer.
+    """
+    profile: UserProfile = Field(
+        ...,
+        description="Detailed public profile of the developer"
+    )
+    total_source_repos: int = Field(
+        ...,
+        ge=0,
+        description="Total count of original non-forked repositories"
+    )
+    top_repositories: List[Repository] = Field(
+        default_factory=list,
+        description="Top starred non-forked repositories"
+    )
+    primary_languages: List[str] = Field(
+        default_factory=list,
+        description="List of detected programming languages across source repos"
+    )
